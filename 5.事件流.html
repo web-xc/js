@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>事件流</title>
+    <style>
+        .box {
+            width: 300px;
+            height: 300px;
+            background-color: pink;
+            margin: 0 auto;
+        }
+        .box1 {
+            width: 200px;
+            height: 200px;
+            background-color: skyblue;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <div class="box1"></div>
+    </div>
+    <a href="https://www.baidu.com" target="_blank">百度一下阻止默认行为</a>
+    <button>点击我1</button>
+    <button class="btn">点击我2</button>
+    <ul>
+        <li>我是第1个li</li>
+        <li>我是第2个li</li>
+        <li>我是第3个li</li>
+        <li>我是第4个li</li>
+    </ul>
+    <script>
+        // 1. 冒泡事件阶段(理解)
+        let num1 = document.querySelector('.box')
+        let num2 = document.querySelector('.box1')
+        num1.addEventListener('click', function (e) {
+            alert('我是爸爸')
+            e.stopPropagation()
+            
+        // 2. 捕获事件阶段(了解)
+        }, false)
+        num2.addEventListener('click', function (e) {
+            alert('我是儿子')
+            
+        // 3. 阻止事件流动 Propagation(传播)
+            e.stopPropagation()
+        }, false)
+        // document.addEventListener('click', function () {
+        //     alert('我是爷爷')
+        // }, false)
+
+        // 4. mouseover和mouseenter区别
+        // mouseover/out会有冒泡 enter/leave没有(推荐)
+        num1.addEventListener('mouseover', function () {
+            console.log(11)
+        })
+
+        // 5. 阻止默认行为 方法 链接不跳转/表单并提交
+        let num3 = document.querySelector('a')
+        num3.addEventListener('click', function (e) {
+            e.preventDefault()
+            e.stopPropagation()
+        })
+
+        // 6. 两种注册事件的区别
+        // 1. 传统on注册L0
+        let num4 = document.querySelector('button')
+        // 多次相同事件只执行最后一次
+        num4.onclick = function () {
+            alert('你好')
+        }
+        num4.onclick = function () {
+            alert('你好1')
+        }
+        // 解除绑定事件
+        num4.onclick = null
+        
+        let num5 = document.querySelector('.btn')
+        num5.addEventListener('click', function () {
+            alert('你好')
+        })
+
+        // 2. 事件监听注册L2
+        // 不会覆盖前面事件
+        num5.addEventListener('click', add)
+        function add() {
+            alert('你好1')
+        }
+        // 解除绑定事件
+        num5.removeEventListener('click', add)
+
+        // 7. 事件委托
+        // 不是给每个li注册事件 而是委托给父级
+        let num6 = document.querySelector('ul')
+        num6.addEventListener('click', function (e) {
+            e.target.style.color = 'red'
+        })
+    </script>
+</body>
+</html>

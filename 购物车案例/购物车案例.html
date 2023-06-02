@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>购物车案例</title>
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container" id="app">
+        <!-- 顶部banner -->
+        <div class="banner-box"><img src="http://autumnfish.cn/static/fruit.jpg" alt="" /></div>
+        <!-- 面包屑 -->
+        <div class="breadcrumb">
+          <span>🏠</span>
+          /
+          <span>购物车</span>
+        </div>
+        <!-- 购物车主体 -->
+        <div class="main">
+          <div class="table">
+            <!-- 头部 -->
+            <div class="thead">
+              <div class="tr">
+                <div class="th">选中</div>
+                <div class="th th-pic">图片</div>
+                <div class="th">单价</div>
+                <div class="th num-th">个数</div>
+                <div class="th">小计</div>
+                <div class="th">操作</div>
+              </div>
+            </div>
+            <!-- 身体 -->
+            <div class="tbody">
+              <!-- 渲染需要的行 -->
+              <!-- 
+                <div class="tr">
+                <div class="td"><input type="checkbox" checked /></div>
+                <div class="td"><img src="http://autumnfish.cn/static/火龙果.png" alt="" /></div>
+                <div class="td">6</div>
+                <div class="td">
+                  <div class="my-input-number">
+                    <button class="decrease"> - </button>
+                    <span class="my-input">2</span>
+                    <button class="increase"> + </button>
+                  </div>
+                </div>
+                <div class="td">12</div>
+                <div class="td"><button class="del">删除</button></div>
+              </div> 
+            -->
+            </div>
+          </div>
+          <!-- 底部 -->
+          <div class="bottom">
+            <!-- 全选 -->
+            <label class="check-all">
+              <input type="checkbox" />
+              全选
+            </label>
+            <div class="right-box">
+              <!-- 所有商品总价 -->
+              <span class="price-box">总价&nbsp;&nbsp;:&nbsp;&nbsp;¥&nbsp;<span class="price">24</span></span>
+              <!-- 结算按钮 -->
+              <button class="button pay">结算( 6 )</button>
+            </div>
+          </div>
+        </div>
+        <!-- 空车 -->
+        <div class="empty" style="display: none;">🛒空空如也</div>
+      </div>
+    <script>
+        let data = [
+            {
+                id: 1,
+                icon: 'http://autumnfish.cn/static/火龙果.png',
+                isChecked: true,
+                num: 2,
+                price: 6,
+            },
+            {
+                id: 2,
+                icon: 'http://autumnfish.cn/static/荔枝.png',
+                isChecked: false,
+                num: 7,
+                price: 20,
+            },
+            {
+                id: 3,
+                icon: 'http://autumnfish.cn/static/榴莲.png',
+                isChecked: false,
+                num: 3,
+                price: 40,
+            },
+            {
+                id: 4,
+                icon: 'http://autumnfish.cn/static/鸭梨.png',
+                isChecked: true,
+                num: 10,
+                price: 3,
+            },
+            {
+                id: 5,
+                icon: 'http://autumnfish.cn/static/樱桃.png',
+                isChecked: false,
+                num: 20,
+                price: 34,
+            },
+        ]
+        // 1. 渲染页面HTML结构
+        let tbody = document.querySelector('.tbody')
+        let btncheck = document.querySelector('.check-all input')
+        let del = document.querySelector('.del')
+        function fn() {
+          let tb = data.map((item, index) => {
+            let {id, icon, isChecked, num, price} = item
+            return `
+             <div class="tr" data-id="${index}">
+                 <div class="td"><input type="checkbox" ${isChecked ? 'checked' : ''} /></div>
+                 <div class="td"><img src="${icon}" alt="" /></div>
+                 <div class="td">${price}</div>
+                 <div class="td">
+                   <div class="my-input-number">
+                     <button class="decrease"> - </button>
+                     <span class="my-input">${num}</span>
+                     <button class="increase"> + </button>
+                   </div>
+                 </div>
+                 <div class="td">${price * num}</div>
+                 <div class="td"><button class="button del">删除</button></div>
+              </div>`
+            })
+            // map返回的数组所以用join转换为字符串渲染到页面
+            tbody.innerHTML = tb.join('')
+
+            // 全选按钮设置
+            btncheck.checked = data.every(item => item.isChecked == true)
+
+            // 总价模块 只选勾选的商品
+            let checkAll = data.filter(item => item.isChecked)
+            // console.log(checkAll) // 筛选出来的数组对象
+
+            // 筛选的对象用reduce累计器计算总价
+            let zj = checkAll.reduce((prev, item) => prev + item.price * item.num, 0)
+            document.querySelector('.price-box .price').innerHTML = zj.toFixed(2)
+
+            // 筛选的对象计算有多少件东西
+            let jiesuan = checkAll.reduce((prev, item) => prev + item.num, 0)
+            document.querySelector('.pay').innerHTML = `结算(${jiesuan})`
+
+            // 如果购物车为空 则底部显示出来
+            let shopping = document.querySelector('.empty')
+            shopping.style.display = data.length == 0 ? 'block' : 'none'
+        }
+        fn()
+
+        // 2. 事件委托做: 删除、增加、全选、删除、数量业务
+        tbody.addEventListener('click', function (e) {
+          let id = e.target.parentNode.parentNode.dataset.id
+          // 删除操作
+          if (e.target.className == 'del') {
+            alert()
+            data.splice(id, 1)
+            fn() // 重新渲染数组生成页面数据
+          }
+
+          // 小按钮全选后 勾选全选按钮
+          if (e.target.className == 'INPUT') {
+            data[id].isChecked = e.target.checked
+            fn()
+          }
+          
+          // 增加商品数量
+          if (e.target.className == 'increase') {
+            let ids = e.target.parentNode.parentNode.parentNode.dataset.id
+            data[ids].num++
+            fn()
+          }
+
+          // 删除商品数量
+          if (e.target.className == 'decrease') {
+            let ids = e.target.parentNode.parentNode.parentNode.dataset.id
+            if (data[ids].num <= 1) {
+                data[ids].num = 1
+            } else {
+              data[ids].num--
+              fn()
+            }
+          }
+        })
+
+        // 3. 全选反选按钮点击事件
+        btncheck.addEventListener('click', function () {
+          data.forEach(item => item.isChecked = this.checked)
+          fn()
+        })
+    </script>
+</body>
+</html>

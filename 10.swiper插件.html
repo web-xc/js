@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>swiper插件使用</title>
+    <link rel="stylesheet" href="https://npm.elemecdn.com/swiper@8/swiper-bundle.min.css">    
+    <style>
+        html,
+        body {
+          position: relative;
+          height: 100%;
+        }
+        body {
+          background: #eee;
+          font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+          font-size: 14px;
+          color: #000;
+          margin: 0;
+          padding: 0;
+        }
+        .swiper {
+          width: 100%;
+          height: 100%;
+        }
+        .swiper-slide {
+          text-align: center;
+          font-size: 18px;
+          background: #fff;
+          /* Center slide text vertically */
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: -webkit-flex;
+          display: flex;
+          -webkit-box-pack: center;
+          -ms-flex-pack: center;
+          -webkit-justify-content: center;
+          justify-content: center;
+          -webkit-box-align: center;
+          -ms-flex-align: center;
+          -webkit-align-items: center;
+          align-items: center;
+        }
+        .swiper-slide img {
+          display: block;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+        .swiper {
+          margin-left: auto;
+          margin-right: auto;
+        }
+        .box {
+            width: 600px;
+            height: 350px;
+            background-color: skyblue;
+            margin: 50px auto;
+        }
+        .swiper-slide img {
+            width: 100%;
+            height: 350px;
+        }
+        .swiper-pagination-bullet {
+            width: 20px;
+            height: 20px;
+            background-color: #000;
+        }
+        .swiper-button-next:after, .swiper-button-prev:after {
+            color: pink;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <div class="swiper mySwiper one">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide"><a href=""><img src="images/b_01.jpg"></a></div>
+              <div class="swiper-slide"><a href=""><img src="images/b_02.jpg"></a></div>
+              <div class="swiper-slide"><a href=""><img src="images/b_03.jpg"></a></div>
+              <div class="swiper-slide"><a href=""><img src="images/b_04.jpg"></a></div>
+              <div class="swiper-slide"><a href=""><img src="images/b_05.jpg"></a></div>
+              <div class="swiper-slide"><a href=""><img src="images/b_06.jpg"></a></div>
+            </div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-pagination"></div>
+          </div>
+    </div>
+    <!-- 需要两个轮播图时 可以这样做 -->
+    <div class="box">
+        <div class="swiper mySwiper two">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide"><a href=""><img src="images/b_01.jpg"></a></div>
+              <div class="swiper-slide"><a href=""><img src="images/b_02.jpg"></a></div>
+              <div class="swiper-slide"><a href=""><img src="images/b_03.jpg"></a></div>
+              <div class="swiper-slide"><a href=""><img src="images/b_04.jpg"></a></div>
+              <div class="swiper-slide"><a href=""><img src="images/b_05.jpg"></a></div>
+              <div class="swiper-slide"><a href=""><img src="images/b_06.jpg"></a></div>
+            </div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-pagination"></div>
+          </div>
+    </div>
+    <script src="https://npm.elemecdn.com/swiper@8.4.7/swiper-bundle.min.js"> </script>
+    <script>
+        var swiper = new Swiper(".one", {
+            // 等分播放
+            slidesPerView: 1,
+            // 背景过渡
+            spaceBetween: 0,
+            // 是否循环
+            loop: true,
+            // 小圆点显示/隐藏
+            pagination: {
+                el: ".swiper-pagination",
+            // 小圆点是否能点
+                clickable: true,
+            },
+            // 左右按钮
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+            // 自动切换
+            autoplay: {
+                // 间隔时间
+                delay: 400,
+                // 到最后一个停止切换 loop模式下无效
+                stopOnLastSlide: false,
+                // 拖动/点击后 停止自动切换
+                disableOnInteraction: false,
+            },
+            // 键盘左右键控制
+            keyboard : true,
+        });
+        
+        // 需要两个轮播图时 可以这样做
+        var swiper = new Swiper(".two", {
+            slidesPerView: 1,
+            spaceBetween: 0,
+            loop: true,
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+            autoplay: {
+                delay: 500,
+                stopOnLastSlide: false,
+                disableOnInteraction: false,
+            },
+            keyboard : true,
+        });
+    </script>
+</body>
+</html>

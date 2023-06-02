@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bootstrap库/jQuery库/Ajax请求实现图书管理</title>
+    <link rel="stylesheet" href="bootstrap.css">
+    <script src="jquery.js"></script>
+</head>
+<body style="padding: 15px;">
+    <!-- 添加图书的面板 -->
+    <div class="panel panel-primary">
+          <div class="panel-heading">
+                <h3 class="panel-title">添加新图书</h3>
+          </div>
+          <div class="panel-body form-inline">     
+                <div class="input-group">
+                    <div class="input-group-addon sm">书名</div>
+                    <input type="text" id="bookname" class="form-control" placeholder="请输入书名">
+                </div>
+                <div class="input-group">
+                    <div class="input-group-addon zz">作者</div>
+                    <input type="text" id="bookzz" class="form-control" placeholder="请输入作者">
+                </div>
+                <div class="input-group">
+                    <div class="input-group-addon cbs">出版社</div>
+                    <input type="text" id="bookcbs" class="form-control" placeholder="请输入出版社">
+                </div>
+                <button class="btn btn-primary">添加</button>
+          </div>
+    </div>
+    <!-- 添加图书的表格 -->
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>书名</th>
+                <th>作者</th>
+                <th>出版社</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody class="tb"></tbody>
+    </table>
+    <script>
+        $(function () {
+        // 1. 获取图书列表数据
+            function data() {
+                $.get('http://ajax-api.itheima.net/api/books', function (res) {
+                    console.log(res)
+                    // 如果查询失败 则return提示框
+                    if (res.message !== '查询图书列表成功') return alert('查询图书列表失败')
+                    // 声明一个空数组 把返回的res通过each遍历追加给tr
+                    let d = []
+                    // i是索引 item是元素
+                    $.each(res.data, function (i, item) {
+                        d.push(`<tr>
+                            <td>${item.id}</td>
+                            <td>${item.bookname}</td>
+                            <td>${item.author}</td>
+                            <td>${item.publisher}</td>
+                            <td><a href="javascript:;" class="del" data-id="${item.id}">删除</a></td>
+                            </tr>`)
+// d.push('<tr><td>'+item.id+'</td><td>'+item.bookname+'</td><td>'+item.author+'</td><td>'+item.publisher+'</td><td><a href="javascript:;" class="del" data-id="'+item.id+'">删除</a></td></tr>')
+                    })
+                    // empty移除所选元素内容 append在所选元素插入内容
+                    $('.tb').empty().append(d.join(''))
+                })
+            }
+            data()
+
+            // $('.del').click(function () {
+            //     console.log(1)
+            // }) 
+            // 2. 通过代理方式动态添加元素的绑定事件 并实现图书删除功能
+            $('tbody').on('click', '.del', function () {
+                console.log(1)
+                // attr() 返回当前元素的id值
+                let id = $(this).attr('data-id')
+                console.log(id)
+            // 使用$.ajax()的DELETE请求删除当前图书id 并重新渲染HTML
+                $.ajax({
+                    type: 'DELETE',
+                    url: 'http://ajax-api.itheima.net/api/books/' + id,
+                    success: function (res) {
+                        // if (res.message !== '查询图书列表成功') return alert('查询图书列表失败')
+                        data()
+                    }
+                })
+            })
+
+            // 3. 为添加按钮绑定事件 并实现图书添加功能
+            $('.btn').click(function () {
+            // 获取三个input的值
+                let sm = $('#bookname').val().trim()
+                let zz = $('#bookzz').val().trim()
+                let cbs = $('#bookcbs').val().trim()
+            // if判断如果没值则return提示框
+                if (sm.length <= 0 || zz.length <= 0 || cbs.length <= 0) {
+                    sm = $('#bookname').val('')
+                    zz = $('#bookzz').val('')
+                    cbs = $('#bookcbs').val('')
+                    return alert('请填写完整的图书信息')
+                } else {
+            // 有值则post请求添加对象参数 res如果不等于添加图书成功则添加图书失败
+            // 等于获取成功则重新获取图书列表 最后把input输入框清空
+                    $.post(
+                      'http://ajax-api.itheima.net/api/books',
+                      {bookname: sm, author: zz, publisher: cbs},
+                      function (res) {
+                        console.log(res)
+                        if (res.message !== '添加图书成功') return alert('添加图书失败')
+                        data()
+                        $('#bookname').val('')
+                        $('#bookzz').val('')
+                        $('#bookcbs').val('')
+                      }
+                    )
+                }
+            })
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>时间戳及案例</title>
+    <style>
+       .countdown {
+         width: 240px;
+         height: 305px;
+         text-align: center;
+         line-height: 1;
+         color: #fff;
+         background-color: brown;
+         overflow: hidden;
+       }
+       .countdown .next {
+         font-size: 16px;
+         margin: 25px 0 14px;
+       }
+       .countdown .title {
+         font-size: 33px;
+       }
+       .countdown .tips {
+         margin-top: 80px;
+         font-size: 23px;
+       }
+       .countdown small {
+         font-size: 17px;
+       }
+       .countdown .clock {
+         width: 142px;
+         margin: 18px auto 0;
+         overflow: hidden;
+       }
+       .countdown .clock span,
+       .countdown .clock i {
+         display: block;
+         text-align: center;
+         line-height: 34px;
+         font-size: 23px;
+         float: left;
+       }
+       .countdown .clock span {
+         width: 34px;
+         height: 34px;
+         border-radius: 2px;
+         background-color: #303430;
+       }
+       .countdown .clock i {
+         width: 20px;
+         font-style: normal;
+       }
+    </style>
+</head>
+<body>
+    <div class="countdown">
+        <p class="next">今天是2021年8月28日</p>
+        <p class="title">生日倒计时</p>
+        <p class="clock">
+          <span id="hour">00</span><i>:</i>
+          <span id="minutes">25</span><i>:</i>
+          <span id="scond">20</span>
+        </p>
+        <p class="tips">现在是18:30:00</p>
+    </div>
+    <script>
+        // 1. 时间戳 总的毫数秒
+        // 利用将来时间减 现在时间戳 = 剩余时间毫秒
+        // 1.getTime() 方法
+        let num1 = new Date()
+        document.write(num1.getTime())
+
+        // 2.new +Date()
+        document.write(+new Date()) // 当前时间戳
+        document.write(+new Date('2023-4-1 00:00:00')) // 指定时间
+
+        // 3.Date.now 只能得到当前
+        document.write(Date.now())
+
+        // 2. 生日倒计时案例
+        fn()
+        setInterval(fn, 1000)
+        function fn() {
+           // 1.获取当前时间戳
+           let n1 = +new Date()
+
+           // 2.获取指定时间戳
+           let n2 = +new Date('2024-4-1 00:00:00')
+
+           // 3.计算剩余毫秒 / 1000 = 剩余秒数
+           let n3 = (n2 - n1) / 1000
+           // console.log(n3)
+
+           // 4.转换时分秒
+           let h = parseInt(n3 / 60 / 60 % 24)
+           h = h < 10 ? '0' + h : h
+           let m = parseInt(n3 / 60 % 60)
+           m = m < 10 ? '0' + m : m
+           let s = parseInt(n3 % 60)
+           s = s < 10 ? '0' + s : s
+           // console.log(h, m, s)
+
+           let m1 = document.querySelector('#hour')
+           let m2 = document.querySelector('#minutes')
+           let m3 = document.querySelector('#scond')
+           m1.innerHTML = h
+           m2.innerHTML = m
+           m3.innerHTML = s
+           
+           let m4 = document.querySelector('.next')
+           let m5 = document.querySelector('.tips')
+           let m6 = new Date()
+           let m7 = m6.getFullYear()
+           let m8 = m6.getMonth() + 1
+           let m9 = m6.getDate()
+           let m10 = m6.getHours()
+           let m11 = m6.getMinutes()
+           let m12 = m6.getSeconds()
+           m4.innerHTML = `今天是${m7}年${m8}月${m9}日`
+           m5.innerHTML = `现在是${m10}:${m11}:${m12}`
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>面向对象封装消息提示</title>
+    <style>
+        .modal {
+          position: fixed;
+          left: 50%;
+          top: 20%;
+          z-index: 999;
+          width: 300px;
+          min-height: 100px;
+          background-color: #fff;
+          border-radius: 4px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+          transform: translate3d(-50%, -50%, 0);
+        }
+        .modal .header {
+          position: relative;
+          padding: 0 10px;
+          font-size: 20px;
+          line-height: 40px;
+        }
+        .modal .header i {
+          position: absolute;
+          top: -2px;
+          right: 15px;
+          color: #999;
+          font-size: 50px;
+          font-style: normal;
+          cursor: pointer;
+        }
+        .modal .body {
+          padding: 10px;
+          text-align: center;
+        }
+        .modal .footer {
+          display: flex;
+          justify-content: flex-end;
+          padding: 10px;
+        }
+        .modal .footer a {
+          padding: 3px 8px;
+          margin-right: 10px;
+          color: #fff;
+          background: #ccc;
+          font-size: 14px;
+          text-decoration: none;
+          border-radius: 2px;
+        }
+        .modal .footer a.submit {
+          background-color: #369;
+        }
+        .box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #delete,
+        #login,
+        #add {
+            margin: 60px;
+            margin-top: 220px;
+            color: #fff;
+            width: 100px;
+            height: 50px;
+            font-size: 16px;
+            background-color: #4a9df0;
+            border-radius: 6px;
+            border: 0;
+        }
+      </style>
+</head>
+<body>
+    <div class="box">
+        <button id="delete">删除</button>
+        <button id="login">登录</button>
+        <button id="add">新增</button>
+    </div>
+    <!-- <div class="modal">
+        <div class="header">温馨提示<i>x</i></div>
+        <div class="body">您没有删除权限操作</div>
+    </div> -->
+    <script>
+        // 1. 模态框的构造函数 创建model公共模态盒子
+        function fn(title = '', msg = '') {
+          // 先给个空字符 测试一下new的形参
+          console.log(title, msg)
+
+          // 1. 创建div标签
+          this.modalBox = document.createElement('div')
+          
+          // 2. 给div标签添加类名 modal
+          this.modalBox.className = 'modal'
+
+          // 3. 添加model盒子 2个div内容并且修改文字
+          // 把形参传递进去 可实现修改文字
+          this.modalBox.innerHTML = `
+              <div class="header">${title}<i>x</i></div>
+              <div class="body">${msg}</div>`
+          console.log(this.modalBox)
+        }
+        // new 出来一样的结构 但文字不一样
+        new fn('温馨提示', '您没有删除权限操作')
+        new fn('友情提示', '您还没有注册账号')
+
+        // 2. 给构造函数 原型对象 添加open方法
+        // 注意不能使用箭头函数 因为构造函数this指向对象
+        fn.prototype.open = function () {
+          // Bug: 多次点击会显示很多模态框
+          // 先判断页面是否有modal盒子 有就删除 没有则继续添加 
+          // 获取modal标签 用逻辑中断判断
+          let box = document.querySelector('.modal')
+          box && box.remove()
+
+          // 把创建的modalBox 显示到页面body中
+          // 注意添加this 因为this指向实例对象 new出来的对象不一样
+          document.body.appendChild(this.modalBox)
+
+          // 等盒子显示出来 然后绑定点击事件
+          // 这里使用箭头函数 因为这个this指向实例化对象
+          this.modalBox.querySelector('i').addEventListener('click', () => {
+            this.close() // 调用移除方法的实例化对象
+          })
+        }
+
+        // 3. 给构造函数 原型对象 添加关闭方法close
+        fn.prototype.close = function () {
+          // 把创建的modelBox 从页面移除
+          // document.body.removeChild(this.modalBox)
+          this.modalBox.remove()
+        }
+
+        // 点击删除按钮
+        document.querySelector('#delete').addEventListener('click', () => {
+          // 先调用fn构造函数
+          let del = new fn('温馨提示', '您没有删除权限操作')
+          // 实例对象调用open方法
+          del.open()
+        })
+
+        // 点击登录按钮
+        document.querySelector('#login').addEventListener('click', () => {
+          // 先调用fn构造函数
+          let log = new fn('友情提示', '您还没有注册账号')
+          // 实例对象调用open方法
+          log.open()
+        })
+
+        // 这就是面向对象复用性高的特点
+        // 点击新增按钮
+        document.querySelector('#add').addEventListener('click', () => {
+          // 先调用fn构造函数
+          let log = new fn('权限警告', '您还没有权限新增')
+          // 实例对象调用open方法
+          log.open()
+        })
+    </script>
+</body>
+</html>

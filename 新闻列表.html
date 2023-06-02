@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>axios渲染新闻列表案例</title>
+    <style>
+        .news-item {
+            display: flex;
+            border: 1px solid #eee;
+            width: 700px;
+            padding: 10px;
+            margin-bottom: 5px;
+        }
+        .thumb {
+            display: block;
+            width: 230px;
+            height: 140px;
+            background-color: #ccc;
+            margin-right: 10px;
+            border-radius: 10px;
+        }
+        .right-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            font-size: 14px;
+            flex: 1;
+        }
+        .title {
+            font-size: 20px;
+            font-weight: normal;
+        }
+        .tags span {
+            display: block;
+            float: left;
+            background-color: #F0F0F0;
+            line-height: 20px;
+            padding: 0 10px;
+            border-radius: 10px;
+            margin-right: 8px;
+        }
+        .footer {
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+    <!-- 新闻列表 -->
+    <div class="news-list list">
+        <!-- 新闻的 item 项 -->
+        <div class="news-item">
+            <img class="thumb" src="" alt="" />
+            <div class="right-box">
+                <!-- 新闻标题 -->
+                <h1 class="title">5G商用在即，三大运营商营收持续下降</h1>
+                <div class="footer">
+                    <div>
+                        <!-- 新闻来源 -->
+                        <span>胡润百富</span>&nbsp;&nbsp;
+                        <!-- 发布日期 -->
+                        <span>2019-10-28 10:14:38</span>
+                    </div>
+                    <!-- 评论数量 -->
+                    <span>评论数：66</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="axios.js"></script>
+    <script>
+        // 1. 封装渲染函数
+        let fn = (arr) => {
+            document.querySelector('.list').innerHTML = 
+            arr.map(item => 
+                `<!-- 新闻的 item 项 -->
+                <div class="news-item">
+                    <img class="thumb" src="${item.img}" alt="" />
+                    <div class="right-box">
+                        <!-- 新闻标题 -->
+                        <h1 class="title">${item.title}</h1>
+                        <div class="footer">
+                            <div>
+                              <!-- 新闻来源 -->
+                              <span>${item.source}</span>&nbsp;&nbsp;
+                              <!-- 发布日期 -->
+                              <span>${item.time}</span>
+                            </div>
+                            <!-- 评论数量 -->
+                            <span>评论数：${item.cmtcount}</span>
+                        </div>
+                    </div>
+                </div>`
+            ).join('')
+        }
+        // 2. 页面一加载 使用axios请求数据并调用函数渲染数据
+        axios.get('http://hmajax.itheima.net/api/news').then(res => {
+            console.log(res.data.data)
+            // 因为避免全局污染 使用函数传参传递数据
+            fn(res.data.data)
+        })
+    </script>
+</body>
+</html>

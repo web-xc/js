@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>微博发布案例</title>
+    <style>
+        * {
+          margin: 0;
+          padding: 0;
+        }
+        ul {
+          list-style: none;
+        }
+        .w {
+          width: 900px;
+          margin: 0 auto;
+        }
+        .controls textarea {
+          width: 878px;
+          height: 100px;
+          resize: none;
+          border-radius: 10px;
+          outline: none;
+          padding-left: 20px;
+          padding-top: 10px;
+          font-size: 18px;
+        }
+        .controls {
+          overflow: hidden;
+        }
+        .controls div {
+          float: right;
+        }
+        .controls div span {
+          color: #666;
+        }
+        .controls div .useCount {
+          color: red;
+        }
+        .controls div button {
+          width: 100px;
+          outline: none;
+          border: none;
+          background: rgb(0, 132, 255);
+          height: 30px;
+          cursor: pointer;
+          color: #fff;
+          font: bold 14px '宋体';
+          transition: all 0.5s;
+        }
+        .controls div button:hover {
+          background: rgb(0, 225, 255);
+        }
+        .controls div button:disabled {
+          background: rgba(0, 225, 255, 0.5);
+        }
+        .contentList {
+          margin-top: 50px;
+        }
+        .contentList li {
+          padding: 20px 0;
+          border-bottom: 1px dashed #ccc;
+          position: relative;
+        }
+        .contentList li .info {
+          position: relative;
+        }
+        .contentList li .info span {
+          position: absolute;
+          top: 15px;
+          left: 100px;
+          font: bold 16px '宋体';
+        }
+        .contentList li .info p {
+          position: absolute;
+          top: 40px;
+          left: 100px;
+          color: #aaa;
+          font-size: 12px;
+        }
+        .contentList img {
+          width: 80px;
+          border-radius: 50%;
+        }
+        .contentList li .content {
+          padding-left: 100px;
+          color: #666;
+          word-break: break-all;
+        }
+        .contentList li .the_del {
+          position: absolute;
+          right: 0;
+          top: 0;
+          font-size: 28px;
+          cursor: pointer;
+        }
+      </style>
+</head>
+<body>
+    <div class="w">
+        <!-- 操作的界面 -->
+        <div class="controls">
+          <img src="./images/9.6/tip.png" alt="" /><br />
+          <!-- maxlength 可以用来限制表单输入的内容长度 -->
+          <textarea placeholder="说点什么吧..." id="area" cols="30" rows="10" maxlength="200"></textarea>
+          <div>
+            <span class="useCount" id="useCount">0</span>
+            <span>/</span>
+            <span>200</span>
+            <button id="send">发布</button>
+          </div>
+        </div>
+        <!-- 微博内容列表 -->
+        <div class="contentList">
+          <ul id="list"></ul>
+        </div>
+      </div>
+      <!-- 添加了hidden属性元素会直接隐藏掉 -->
+      <li hidden>
+        <div class="info">
+          <img class="userpic" src="./images/9.6/03.jpg" />
+          <span class="username">死数据:百里守约</span>
+          <p class="send-time">死数据:发布于 2020年12月05日 00:07:54</p>
+        </div>
+        <div class="content">死数据:111</div>
+        <span class="the_del">X</span>
+      </li>
+      <script>
+        // maxlength是表单属性 是给表单设置一个最大长度
+        // 模拟数据
+        let data = [
+          { uname: '司马懿', imgSrc: './images/9.5/01.jpg' },
+          { uname: '女娲', imgSrc: './images/9.5/02.jpg' },
+          { uname: '百里守约', imgSrc: './images/9.5/03.jpg' },
+          { uname: '亚瑟', imgSrc: './images/9.5/04.jpg' },
+          { uname: '虞姬', imgSrc: './images/9.5/05.jpg' },
+          { uname: '张良', imgSrc: './images/9.5/06.jpg' },
+          { uname: '安其拉', imgSrc: './images/9.5/07.jpg' },
+          { uname: '李白', imgSrc: './images/9.5/08.jpg' },
+          { uname: '阿珂', imgSrc: './images/9.5/09.jpg' },
+          { uname: '墨子', imgSrc: './images/9.5/10.jpg' },
+          { uname: '鲁班', imgSrc: './images/9.5/11.jpg' },
+          { uname: '嬴政', imgSrc: './images/9.5/12.jpg' },
+          { uname: '孙膑', imgSrc: './images/9.5/13.jpg' },
+          { uname: '周瑜', imgSrc: './images/9.5/14.jpg' },
+          { uname: '老夫子', imgSrc: './images/9.5/15.jpg' },
+          { uname: '狄仁杰', imgSrc: './images/9.5/16.jpg' },
+          { uname: '扁鹊', imgSrc: './images/9.5/17.jpg' },
+          { uname: '马可波罗', imgSrc: './images/9.5/18.jpg' },
+          { uname: '露娜', imgSrc: './images/9.5/19.jpg' },
+          { uname: '孙悟空', imgSrc: './images/9.5/20.jpg' },
+          { uname: '黄忠', imgSrc: './images/9.5/21.jpg' },
+          { uname: '百里玄策', imgSrc: './images/9.5/22.jpg' },
+        ]
+        // 1. 检测用户输入字数
+        let text = document.querySelector('textarea')
+        let useCount = document.querySelector('.useCount')
+        let ul = document.querySelector('#list')
+        text.addEventListener('input', function () {
+          useCount.innerHTML = this.value.length
+        })
+
+        // 2. 发布内容不能为空
+        // 点击button后判断 内容为空 则提示不能输入为空 并直接return 不能为空
+        // 使用字符串.trim()去掉首尾空格
+        // 并将表单value值设置为空字符串 同时字数设置为0
+        let send = document.querySelector('#send')
+        send.addEventListener('click', function () {
+          if (text.value.trim() === '') {
+            text.value = ''
+            useCount.innerHTML  = 0
+            return alert('内容不能为空')
+          }
+
+          // 4. 发布随机数
+          function fn(min, max) {
+            return Math.floor(Math.random() * (max - min + min) + min)
+          }
+          let fn1 = fn(0, data.length)
+
+          // 3. 新增留言
+          // 创建小li 通过innerHTML追加数据
+          // 随机获取数据数组内容 替换图片名字及留言内容
+          // 利用时间对象将时间动态化 new Date().toLocaleString()
+          let li = document.createElement('li')
+          li.innerHTML = `
+            <div class="info">
+              <img class="userpic" src=${data[fn1].imgSrc} />
+              <span class="username">${data[fn1].uname}</span>
+              <p class="send-time">发布于 ${new Date().toLocaleString()}</p>
+            </div>
+              <div class="content">${text.value}</div>
+              <span class="the_del">X</span>
+          `
+
+          // 5. 删除留言操作 放到追加的前面
+          // 在事件处理函数里获取点击按钮 注册点击事件
+          // 易错点: 必须在事件里获取 外面获取不到
+          // 放到追加ul的前面 创建元素同时顺便绑定了事件
+          let del = li.querySelector('.the_del')
+          del.addEventListener('click', function () {
+            ul.removeChild(li)
+          })
+
+          // 追加给ul 用父元素.insertBefore(子元素, 元素前面)
+          ul.insertBefore(li, ul.children[0])
+
+          // 6. 重置表单域内容为空
+          text.value = ''
+          useCount.innerHTML = 0
+        })
+        
+        // 7. 按下回车发布信息
+        // 1.事件侦听三要素 键盘事件 发布信息
+        // 2.keyup 按下键盘松开后触发
+        // 3.keydown 按下键盘就触发  场景: 拖拽使用
+        text.addEventListener('keyup', function (e) {
+            // console.log(e)   // e.keyCode(废弃)
+            // 4.现使用key
+            console.log(e.key)
+            if (e.key == 'Enter') {
+                // 5.自动触发点击按钮
+                send.click()
+            }
+        })
+      </script>
+</body>
+</html>

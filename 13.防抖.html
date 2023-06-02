@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>防抖以及底层实现</title>
+    <style>
+    .box {
+      width: 300px;
+      height: 300px;
+      color: #fff;
+      font-size: 100px;
+      text-align: center;
+      background-color: #ccc;
+    }
+    </style>
+</head>
+<body>
+    <div class="box"></div>
+    <script src="lodash.min.js"></script>
+    <script>
+        // 1. 防抖底层实现
+        // 在点击事件内的时间 频繁触发事件 只执行一次
+        // 比如王者的回城 被打断就会重来
+        // 使用场景: 搜索框输入联想词、手机号邮箱验证 可减少服务器请求
+
+        // 2. 鼠标在盒子上移动 数字就会加1 使用防抖实现性能优化
+        let box = document.querySelector('.box')
+        let num = 1
+        function fn() {
+        // 如果有很多DOM操作 大量数据处理 可能会卡
+            box.innerHTML = num++
+        }
+        // box.addEventListener('mousemove', fn)
+
+        // 3. 利用lodash库实现防抖 500ms之后加1
+        // _.debounce(函数, 时间)
+        // box.addEventListener('mousemove', _.debounce(fn, 100))
+
+        // 4. 手写防抖函数 核心是利用setTimeout定时器实现
+        // 1. 声明定时器变量
+        // 2. 每次鼠标事件 先判断是否有定时器 有就清除以前的定时器
+        // 3. 没有则开启定时器 存到定时器变量里
+        // 4. 定时器里写函数调用
+        function fn1(fn, time) {
+            let t = 0
+            // return 返回一个匿名函数
+            return function () {
+                // 判断是否有定时器 有就清除
+                if (t) clearTimeout(t)
+                // 没有定时器则开启定时器 再调用fn() 
+                t = setTimeout(function () {
+                    fn()
+                }, time)
+            }   
+        }
+        // 函数一调用 就会返回一个值
+        // fn1(fn, 500) = return function()
+        box.addEventListener('mousemove', fn1(fn, 500))
+    </script>
+</body>
+</html>

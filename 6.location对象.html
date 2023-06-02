@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>location对象</title>
+</head>
+<body>
+    <a href="">3秒后跳转百度页面</a>
+    <!-- 3.location.search 属性 -->
+    <form action="4.JS执行机制.html">
+        <input type="text" name="username">
+        <button>提交</button>
+    </form>
+    <a href="#one">第一个</a>
+    <a href="#two">第二个</a>
+    <button class="btn">强制刷新</button>
+    <script>
+        // 1. location.href 得到url地址 可读写 可利用js跳转页面
+        console.log(location.href)
+        // location.href = 'http://baidu.com'
+
+        // 2. 3秒后跳转页面
+        let num1 = document.querySelector('a')
+        let num2 = 100
+        let num3 = setInterval(function () {
+            num2--
+            num1.innerHTML = `${num2}秒后跳转百度页面`
+            if (num2 == 1) {
+                clearInterval(num3)
+                location.href = 'http://baidu.com'
+            }
+        }, 1000)
+        
+        // 3. location.search 属性
+
+        // 4. location.hash # 属性 vue路由
+        let num4 = document.querySelector('a')
+        document.write(location.hash)
+
+        // 5. location.reload 属性 方法
+        let num5 = document.querySelector('.btn')
+        num5.addEventListener('click', function () {
+            // 强制刷新 默认为 true
+            location.reload()
+        })
+    </script>
+</body>
+</html>

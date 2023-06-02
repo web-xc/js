@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>事件对象属性</title>
+    <style>
+        img {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <button>点击我</button>
+    <img src="images/tianshi.gif" alt="">
+    <script>
+        // 1. 事件对象
+        let num1 = document.querySelector('button')
+        num1.addEventListener('click', function (e) {
+            console.log(e)
+        })
+        // 2. 事件对象常用属性
+        document.addEventListener('click', function (e) {
+            // 当前视口坐标
+            console.log(e.clientX, e.clientY)
+            // 整个页面坐标
+            console.log(e.pageX, e.pageY)
+            // 当前元素坐标
+            console.log(e.offsetX, e.offsetY)
+        })
+        // 3. 跟随鼠标案例
+        let img = document.querySelector('img')
+        document.addEventListener('mousemove', function (e) {
+            // 不断获取当前鼠标坐标 把坐标给图片
+            img.style.top = e.pageY  + -30 + 'px'
+            img.style.left = e.pageX + -30 +'px'
+        })
+    </script>
+</body>
+</html>

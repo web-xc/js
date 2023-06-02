@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>焦点图案例</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        li {
+            list-style: none;
+        }
+        .main {
+            width: 700px;
+            margin: auto;
+            background: #000;
+        }
+        .slides {
+            height: 320px;
+            position: relative;
+        }
+        .slides ul li {
+            /* display: none; */
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            /* 这里实现淡入淡出的关键 */
+            transition: all .3s;
+        }
+        .slides li.active {
+            /* display: block; */
+            opacity: 1;
+        }
+        .slides .extra {
+            width: 700px;
+            height: 53px;
+            line-height: 53px;
+            position: absolute;
+            bottom: 0px;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 10;
+        }
+        .slides .extra h3 {
+            width: 82%;
+            margin: 0;
+            margin-right: 20px;
+            padding-left: 20px;
+            color: #98E404;
+            font-size: 28px;
+            float: left;
+            font-weight: 500;
+            font-family: "Microsoft Yahei", Tahoma, Geneva;
+        }
+        .slides .extra a {
+            width: 30px;
+            height: 29px;
+            display: block;
+            float: left;
+            margin-top: 12px;
+            margin-right: 3px;
+            background-image: url(./images/icon_focus_switch.png);
+        }
+        .slides .extra .prev {
+            background-position: 0 0;
+        }
+        .slides .extra .prev:hover {
+            background-position: -30px 0;
+        }
+        .slides .extra .next {
+            background-position: -60px 0;
+        }
+        .slides .extra .next:hover {
+            background-position: -90px 0;
+        }
+        .indicator {
+            padding: 10px 0;
+        }
+        .indicator ul {
+            list-style-type: none;
+            margin: 0 0 0 4px;
+            padding: 0;
+            overflow: hidden;
+        }
+        .indicator ul li {
+            position: relative;
+            float: left;
+            width: 60px;
+            margin: 0 4px 0 5px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .indicator li img {
+            display: block;
+            border: 0;
+            text-align: center;
+            width: 60px;
+        }
+        .indicator li .mask {
+            width: 60px;
+            height: 60px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+        .indicator li .border {
+            display: none;
+            width: 54px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            z-index: 20;
+            border: 3px solid #98E404;
+        }
+        /* li里面的mask 和 border 刚开始都是显示的 */
+        /* 我们写一个样式css */
+        .indicator .active .mask {
+            display: none;
+        }
+        .indicator .active .border {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <div class="slides">
+            <ul>
+                <li class="active"><a href="#"><img src="./images/b_01.jpg" alt="第1张图的描述信息"></a></li>
+                <li><a href="#"><img src="./images/b_02.jpg" alt="第2张图的描述信息"></a></li>
+                <li><a href="#"><img src="./images/b_03.jpg" alt="第3张图的描述信息"></a></li>
+                <li><a href="#"><img src="./images/b_04.jpg" alt="第4张图的描述信息"></a></li>
+                <li><a href="#"><img src="./images/b_05.jpg" alt="第5张图的描述信息"></a></li>
+                <li><a href="#"><img src="./images/b_06.jpg" alt="第6张图的描述信息"></a></li>
+                <li><a href="#"><img src="./images/b_07.jpg" alt="第7张图的描述信息"></a></li>
+                <li><a href="#"><img src="./images/b_08.jpg" alt="第8张图的描述信息"></a></li>
+                <li><a href="#"><img src="./images/b_09.jpg" alt="第9张图的描述信息"></a></li>
+                <li><a href="#"><img src="./images/b_10.jpg" alt="第9张图的描述信息"></a></li>
+            </ul>
+            <div class="extra">
+                <h3>第1张图的描述信息</h3>
+                <a class="prev" href="javascript:;"></a>
+                <a class="next" href="javascript:;"></a>
+            </div>
+        </div>
+        <div class="indicator">
+            <ul>
+                <li class="active">
+                    <img src="images/s_01.jpg">
+                    <span class="mask"></span>
+                    <span class="border"></span>
+                </li>
+                <li>
+                    <img src="images/s_02.jpg">
+                    <span class="mask"></span>
+                    <span class="border"></span>
+                </li>
+                <li>
+                    <img src="images/s_03.jpg">
+                    <span class="mask"></span>
+                    <span class="border"></span>
+                </li>
+                <li>
+                    <img src="images/s_04.jpg">
+                    <span class="mask"></span>
+                    <span class="border"></span>
+                </li>
+                <li>
+                    <img src="images/s_05.jpg">
+                    <span class="mask"></span>
+                    <span class="border"></span>
+                </li>
+                <li>
+                    <img src="images/s_06.jpg">
+                    <span class="mask"></span>
+                    <span class="border"></span>
+                </li>
+                <li>
+                    <img src="images/s_07.jpg">
+                    <span class="mask"></span>
+                    <span class="border"></span>
+                </li>
+                <li>
+                    <img src="images/s_08.jpg">
+                    <span class="mask"></span>
+                    <span class="border"></span>
+                </li>
+                <li>
+                    <img src="images/s_09.jpg">
+                    <span class="mask"></span>
+                    <span class="border"></span>
+                </li>
+                <li>
+                    <img src="images/s_10.jpg">
+                    <span class="mask"></span>
+                    <span class="border"></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+<script>
+    let xl = document.querySelectorAll('.indicator li')
+    let dl = document.querySelectorAll('.slides ul li')
+    let text = document.querySelector('.extra h3')
+    let btn = document.querySelector('.next')
+    let btn1 = document.querySelector('.prev')
+    let main = document.querySelector('.main')
+    for (let num1 = 0; num1 < xl.length; num1++) {
+        // 1.鼠标经过小图片变高亮
+        xl[num1].addEventListener('mouseenter', function () {
+            document.querySelector('.indicator .active').classList.remove('active')
+            this.classList.add('active')
+        // 2. 鼠标经过当前小图片后大图片变化
+        // 利用opacity实现淡入淡出效果
+            document.querySelector('.slides .active').classList.remove('active')
+            dl[num1].classList.add('active')
+        // 3. 鼠标经过图片 文字改变
+            text.innerHTML = `第${num1 + 1}张图的描述信息`
+
+        // 6. 解决Bug 如果鼠标经过后 再次点击播放会乱序
+        // 让index重新赋值为 当前鼠标经过索引号
+            index = num1
+        })
+    }
+
+    // 4. 右侧按钮点击事件
+    // 全局变化量变量 不断自增 控制器/给左右按钮同时使用
+    let index = 0
+    btn.addEventListener('click', function () {
+        index++  // 变量点击后自增
+
+        // 1. 解决点击最后一张后报错 等于10之后index为0
+        if (index == 10) {
+            index = 0
+        }
+        // 2. // 10 10 余 0
+        // index = index % 10 
+        fn()
+    })
+
+    // 5.左侧按钮点击事件
+    btn1.addEventListener('click', function () {
+        index--
+        if (index < 0) {
+            index = 9
+        }
+        // 10 + -1 = 9 % 10 余 1
+        // index = (10 + index) % xl.length
+        fn()
+    })
+
+    // 6. 因为左右按钮有大量相同代码 可以封装成函数 然后调用
+    function fn() {
+        // 选出 index 大/小图片 排它思想
+        document.querySelector('.indicator .active').classList.remove('active')
+        xl[index].classList.add('active')
+        document.querySelector('.slides .active').classList.remove('active')
+        dl[index].classList.add('active')
+        text.innerHTML = `第${index + 1}张图的描述信息`
+    }
+
+    // 7. 开启轮播定时器
+    let timer = setInterval(function () {
+    // 自动调用右侧按钮点击事件
+        btn.click()
+    }, 800)
+
+    // 如果不清除 点击哪个就不会停止
+    // 8.鼠标经过清除定时器
+    main.addEventListener('mouseenter', function () {
+        clearInterval(timer)
+    })
+
+    // 9. 鼠标经过开启定时器
+    main.addEventListener('mouseleave', function () {
+    // 直接再开启一个定时器 不要重新赋值了
+        timer = setInterval(function () {
+            btn.click()
+        }, 800)
+    })
+</script>
+</html>

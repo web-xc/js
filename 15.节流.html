@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>节流以及底层实现</title>
+    <style>
+        .box {
+          width: 300px;
+          height: 300px;
+          color: #fff;
+          font-size: 100px;
+          text-align: center;
+          background-color: #ccc;
+        }
+        </style>
+</head>
+<body>
+    <div class="box"></div>
+    <script src="lodash.min.js"></script>
+    <script>
+        // 1. 节流底层实现
+        // 在3秒内频繁触发事件只执行一次
+        // 比如王者的技能冷却期间是无法释放的
+        // 使用场景: 鼠标mousemove、页面尺寸缩放resize、滚动条scroll滚动...
+        let box = document.querySelector('.box')
+        let num = 1
+        function fn() {
+            box.innerHTML = num++
+        }
+        // box.addEventListener('mousemove', fn)
+
+        // 2. 利用lodsah库实现 节流 500ms内只执行一次
+        // _.throttle(函数, 时间)
+        // box.addEventListener('mousemove', _.throttle(fn, 1000))
+
+        // 3. 手写节流函数 核心是利用setTimeout定时器实现
+        // 1. 声明一个变量
+        // 2. 每次鼠标事件 先判断是否有定时器 有则不开启定时器
+        // 3. 没有则开启定时器 存入变量里
+        // 4. 定时器里调用fn()函数
+        // 5. 定时器里把定时器清空 null 为下次在开启定时器
+        function fn1(fn, time) {
+            let t = 0
+            return function () {
+                if (!t) {
+                    t = setTimeout(function () {
+                        fn()
+        // 设置为null 覆盖定时器 就可以开启下次定时器了
+                        t = null
+                    }, time)
+                }
+            }
+        }
+        box.addEventListener('mousemove', fn1(fn, 200))
+
+        // 4. 清除定时器问题
+        // 在setTimeout里是无法删除定时器的 因为定时器还在运作
+        // 所以使用 t = null 而不是clearTimeout(t)
+        let n1 = null
+        n1 = setTimeout(function () {
+            clearTimeout(n1)
+            console.log(n1) // 打印为1
+        }, 200)
+    </script>
+</body>
+</html>

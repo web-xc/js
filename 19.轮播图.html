@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>轮播图</title>
+    <style>
+        .main {
+            position: relative;
+            width: 590px;
+            height: 470px;
+            margin: 0 auto;
+        }
+        li {
+            list-style: none;
+        }
+        .box ul li {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: all .3s;
+        }
+        .box ul li img {
+            width: 590px;
+            height: 470px;
+            border-radius: 20px;
+        }
+        .box .ac {
+            opacity: 1;
+        }
+        .btn,
+        .btn1 {
+            display: block;
+            position: absolute;
+            top: 50%;
+            width: 50px;
+            height: 50px;
+            line-height: 46px;
+            color: #fff;
+            font-size: 25px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            background-color: #00000026;
+            border-radius: 0px 30px 30px 0px;
+            transform: translateY(-50%);
+        }
+        .btn1 {
+            right: 0;
+            border-radius: 30px 0px 0px 30px;
+        }
+        .box1 ul {
+            display: block;
+            position: absolute;
+            left: 50%;
+            /* bottom: 20px; */
+            width: 100px;
+            height: 20px;
+            background-color: #00000026;
+            transform: translateX(-50%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .box1 li {
+            width: 12px;
+            height: 12px;
+            background-color: #fff;
+            margin-right: 5px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .box1 .ac {
+            background-color: #000;
+            box-shadow: 0px 0px 11px 2px #484848;
+        }
+        .box1 li:hover {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <div class="box">
+            <ul>
+                <li class="ac"><img src="https://imgcps.jd.com/ling-cubic/ling4/lab/amZzL3QxLzQ5MTQzLzI4LzE3MDM2LzIxOTg4OS82MTM4NDhkNkU2MDY1ZWM5OC9iM2I4ZWE1ODE5MmQzNmI0LnBuZw/5Lqs6YCJ5aW96LSn/5L2g5YC85b6X5oul5pyJ/1635183804528672769/cr/s/q.jpg" alt=""></li>
+                <li><img src="https://imgcps.jd.com/ling-cubic/ling4/lab/amZzL3QxLzc5NjAyLzI3LzE5Mjk0LzkwMDY3LzYzZWE0YzlmRmVkZTNmYjYyLzg3YTYwM2JlZmVmYzE5MzYucG5n/5Lqs6YCJ5aW96LSn/5L2g5YC85b6X5oul5pyJ/1635182825918623746/cr/s/q.jpg" alt=""></li>
+                <li><img src="https://img20.360buyimg.com/pop/s1180x940_jfs/t1/176126/38/35837/63464/642fb76dF7bd3f67e/13c84e55d8cd35f8.jpg.avif" alt=""></li>
+                <li><img src="https://imgcps.jd.com/ling-cubic/ling4/lab/amZzL3QxLzExNjMwOC8yOC8zMzMxLzEyNTY5MS81ZWE2ZDgxOEUwOTIwZjE5Mi9jYTBlZjJlOWNiMjA5MTI2LnBuZw/5Lqs6YCJ5aW96LSn/5L2g5YC85b6X5oul5pyJ/1635183804528672769/cr/s/q.jpg" alt=""></li>
+            </ul>
+        </div>
+        <div>
+            <a href="javascript:;" class="btn">&gt;</a>
+            <a href="javascript:;" class="btn1">&lt;</a>
+        </div>
+        <div class="box1">
+            <ul>
+                <li class="ac"></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+        </div>
+    </div>
+    <script>
+        let box = document.querySelectorAll('.box ul li')
+        let box1 = document.querySelectorAll('.box1 li')
+        let btn = document.querySelector('.btn')
+        let btn1 = document.querySelector('.btn1')
+        let main = document.querySelector('.main')
+        let index = 0
+        // 1.加号操作
+        btn1.addEventListener('click', function () {
+            index++
+            if (index > 3) {
+                index = 0
+            }
+            fn()
+        })
+
+        // 2.减号操作
+        btn.addEventListener('click', function () {
+            index--
+            if (index < 0) {
+                index = 3
+            }
+            fn()
+        })
+
+        // 3.封装函数 轮播图小圆点跟进
+        function fn() {
+            document.querySelector('.box .ac').classList.remove('ac')
+            box[index].classList.add('ac')
+            // 轮播图小圆点跟进
+            document.querySelector('.box1 .ac').classList.remove('ac')
+            box1[index].classList.add('ac')
+        }
+
+        // 4.轮播图小圆点点击事件
+        for (let num1 = 0; num1 < box1.length; num1++) {
+            box1[num1].addEventListener('click', function () {
+                document.querySelector('.box .ac').classList.remove('ac')
+                box[num1].classList.add('ac')
+                document.querySelector('.box1 .ac').classList.remove('ac')
+                box1[num1].classList.add('ac')
+                index = num1
+            })
+        // 6.鼠标滑入小圆点进入对应轮播图
+            box1[num1].addEventListener('mouseenter', function () {
+                document.querySelector('.box .ac').classList.remove('ac')
+                box[num1].classList.add('ac')
+                document.querySelector('.box1 .ac').classList.remove('ac')
+                box1[num1].classList.add('ac')
+                index = num1
+            })
+        }
+
+        // 5.轮播定时器 开启/关闭
+        let time = setInterval(function () {
+            btn1.click()
+        }, 600)
+        main.addEventListener('mouseenter', function () {
+            clearInterval(time)
+        })
+        main.addEventListener('mouseleave', function () {
+            time = setInterval(function () {
+            btn1.click()
+        }, 600)
+        })
+    </script>
+</body>
+</html>

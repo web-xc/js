@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>axios请求post登录提示框封装案例</title>
+    <!-- 引入bootstrap.css -->
+    <link rel="stylesheet" href="https://npm.elemecdn.com/bootstrap@5.2.2/dist/css/bootstrap.min.css">
+    <!-- 公共 -->
+    <style>
+        html,
+        body {
+            background-color: #EDF0F5;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            width: 520px;
+            height: 540px;
+            background-color: #fff;
+            padding: 60px;
+            box-sizing: border-box;
+        }
+        .container h3 {
+            font-weight: 900;
+        }
+        /* 表单容器和内容 */
+        .form_wrap {
+            color: #8B929D !important;
+        }
+        .form-text {
+            color: #8B929D !important;
+        }
+        /* 提示框样式 */
+        .alert {
+            transition: .5s;
+            opacity: 0;
+        }
+        .alert.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h3>欢迎-登录</h3>
+        <!-- 登录结果-提示框 -->
+        <div class="alert alert-success" role="alert"></div>
+        <!-- 表单 -->
+        <div class="form_wrap">
+            <form>
+                <div class="mb-3">
+                    <label for="username" class="form-label">账号名</label>
+                    <input type="text" class="form-control username">
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">密码</label>
+                    <input type="password" class="form-control password">
+                </div>
+                <button type="button" class="btn btn-primary btn-login">登 录</button>
+            </form>
+        </div>
+    </div>
+    <script src="axios.js"></script>
+    <script>
+        // 1. 点击登录按钮事件
+        document.querySelector('.btn').addEventListener('click', function () {
+        // 2. 获取表单数据
+            let user = document.querySelector('.username').value
+            let pass = document.querySelector('.password').value
+            console.log(user, pass)
+        // 3. 表单数据正则效验
+        if(!/^\w{8,}$/.test(user)) {
+            obj.n2('用户名必须是8位以上')
+            return
+        }
+        if (!/^\w{6,}$/.test(pass)) {
+            obj.n2('密码必须是6位以上')
+            return
+        }
+        // 4. 发送ajax请求
+        axios.post('http://hmajax.itheima.net/api/login', {username: user, password: pass}).then(res => {
+            console.log(res)
+            obj.n1('登录成功')
+        // 5. 登录成功则跳转页面
+        location.href = 'http://baidu.com'
+        }).catch(error => {
+        // 6. 登录失败则返回接口错误
+            console.log(error)
+            obj.n2(error.response.data.message)
+        })
+        })
+
+        // 7. 登录提示框封装
+        // let alert = document.querySelector('.alert')
+        // // 1. 设置内容样式
+        // alert.innerText = '提示消息'
+        // alert.classList.add('show')
+        // alert.classList.add('alert-success')
+        // // 2. 用定时器实现2秒后自动消失
+        // setTimeout(() => {
+        //     alert.classList.remove('show')
+        //     alert.classList.remove('alert-success')
+        // }, 1000)
+
+        // 8. 登录提示框 面向对象封装
+        let obj = {
+            n1(msg) {
+            // 4. 调用简化代码
+                this.n3(msg, 'alert-success')
+            },
+            n2(msg) {
+                this.n3(msg, 'alert-danger')
+            },
+            // 可继续简化代码 将相同代码再次封装
+            n3(msg, list) {
+                let alert = document.querySelector('.alert')
+               // 1. 设置内容样式
+               alert.innerText = msg
+               alert.classList.add('show')
+               alert.classList.add(list)
+               // 2. 用定时器实现2秒后自动消失
+               setTimeout(() => {
+                   alert.classList.remove('show')
+                // 3. 简化代码的传参
+                   alert.classList.remove(list)
+               }, 1000)
+            }
+        }
+    </script>
+</body>
+</html>

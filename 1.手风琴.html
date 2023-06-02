@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>手风琴案例</title>
+  <style>
+    ul {
+      list-style: none;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    div {
+      width: 1200px;
+      height: 400px;
+      margin: 50px auto;
+      border: 1px solid red;
+      overflow: hidden;
+    }
+    div li {
+      width: 240px;
+      height: 400px;
+      float: left;
+      transition: all 500ms;
+    }
+    div ul {
+      width: 1200px;
+    }
+  </style>
+</head>
+<body>
+  <div id="box">
+    <ul>
+      <li>
+        <a href="#">
+          <img src="./images/1.jpg" alt="">
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <img src="./images/2.jpg" alt="">
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <img src="./images/3.jpg" alt="">
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <img src="./images/4.jpg" alt="">
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <img src="./images/5.jpg" alt="">
+        </a>
+      </li>
+    </ul>
+  </div>
+  <script>
+    // 获取5个li
+    let num1 = document.querySelectorAll('li')
+    console.log(num1.length);
+    // 1. 遍历5个li
+    for (let num2 = 0; num2 < num1.length; num2++) {
+      // 2. 对五个li添加鼠标移入事件
+      num1[num2].addEventListener('mouseenter', function () {
+        // 3. 遍历五个li 移入的瞬间五个li变成100px
+        for (let num3 = 0; num3 < num1.length; num3++) {
+          num1[num3].style.width = '100px'
+        }
+        // 4. 然后当前li变成800px 其他是100px
+        this.style.width = '800px'
+      })
+      // 5. 鼠标离开事件
+      num1[num2].addEventListener('mouseleave', function () {
+        // 6. 遍历五个li 离开后都变成240px 也就是还原li的大小
+        for (let num3 = 0; num3 < num1.length; num3++) {
+          num1[num3].style.width = '240px'
+        }
+      })
+    }
+  </script>
+</body>
+</html>

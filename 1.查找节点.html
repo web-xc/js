@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>查找父节点</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        .box {
+            position: relative;
+            width: 10px;
+            height: 10px;
+            margin: 10px auto;
+            border: 1px solid #ccc;
+        }
+        .box i {
+            position: absolute;
+            left: -13px;
+            top: 0;
+            width: 10px;
+            height: 10px;
+            border: 1px solid #ccc;
+            font-size: 12px;
+            line-height: 10px;
+            color: #ccc;
+            font-style: normal;
+            cursor: pointer;
+        }
+        .box2 {
+            width: 149px;
+            height: 152px;
+            border: 1px solid #000;
+            background: url(./images/1.png) no-repeat;
+            position: relative;
+        }
+        .box3 {
+            position: absolute;
+            right: -52px;
+            top: -1px;
+            width: 50px;
+            height: 50px;
+            background: url(./images/2.png) no-repeat -159px -102px;
+            cursor: pointer;
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+    <div class="boxbox">
+        你好啊
+        <div class="boxbox1">你好</div>
+    </div>
+
+    <div class="box">
+        <img src="./images/3.png" alt="">
+        <i class="box1">x</i>
+    </div>
+
+    <div class="box2">
+        <span class="box3"></span>
+    </div>
+    <div class="box2">
+        <span class="box3"></span>
+    </div>
+    <div class="box2">
+        <span class="box3"></span>
+    </div>
+    <script>
+        // 1. parentNode 查找父节点
+        let num1 = document.querySelector('.boxbox1')
+        num1.parentNode.style.display = 'none'
+
+        // 2. 关闭二维码案例
+        let num2 = document.querySelector('.box1')
+        num2.addEventListener('click', function () {
+            this.parentNode.style.display = 'none'
+        })
+
+        // 3. 关闭多个二维码
+        let num3 = document.querySelectorAll('.box3')
+        // 绑定多个事件给box3
+        for (let num4 = 0; num4 < num3.length; num4++) {
+            num3[num4].addEventListener('click', function () {
+        // 关闭当前二维码 点击谁 就关闭父元素
+                this.parentNode.style.display = 'none'
+            })
+        }
+    </script>
+</body>
+</html>
