@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootstrap模态框的使用</title>
+    <link rel="stylesheet" href="https://npm.elemecdn.com/bootstrap@5.2.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target=".my-box">显示弹框</button>
+    <!-- data-bs-toggle="modal" data-bs-target=".my-box" -->
+    <div class="modal my-box" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">提示框</h5>
+                    <button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="modal"></button>
+                    <!-- data-bs-dismiss="modal" -->
+                </div>
+                <div class="modal-body">用户名: <input type="text"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 通过js方式控制弹窗 -->
+    <button type="button" class="btn btn-primary edit_btn">编辑姓名</button>
+    <div class="modal name-box" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">请输入姓名</h5>
+                    <button type="button" class="btn-close save_btn1" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="">
+                        <span>姓名：</span>
+                        <input type="text" class="username">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary save_btn2">取消</button>
+                    <button type="button" class="btn btn-primary save_btn">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://npm.elemecdn.com/bootstrap@5.2.2/dist/js/bootstrap.min.js"></script>
+    <script>
+        // 01. 通过css类名控制弹窗
+        // data-bs-toggle="类名" 控制显示元素
+        // data-bs-target="类名" 控制切换显示元素
+        // data-bs-dismiss="类名" 控制切换隐藏的元素
+
+        // 02. 如果弹窗之前有js代码 就得使用js方式弹窗
+        // 1. 创建弹窗实例对象
+        let box = new bootstrap.Modal(document.querySelector('.name-box'))
+
+        // 2. 通过创建的实例对象调用 box.show() 显示方法
+        document.querySelector('.edit_btn').addEventListener('click', () => {
+            // 在弹窗之前设置好表单默认内容
+            document.querySelector('.username').value = '张三'
+            box.show()
+        })
+        // 3. box.hide() 隐藏方法
+        document.querySelector('.save_btn').addEventListener('click', () => {
+            box.hide()
+        })
+        document.querySelector('.save_btn1').addEventListener('click', () => {
+            box.hide()
+        })
+        document.querySelector('.save_btn2').addEventListener('click', () => {
+            box.hide()
+        })
+    </script>
+</body>
+</html>

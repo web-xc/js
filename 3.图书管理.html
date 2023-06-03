@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图书管理-增删改查功能</title>
+    <!-- 引入bootstrap.css -->
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.3/css/bootstrap.min.css" rel="stylesheet">
+    <!-- 核心样式 -->
+    <link rel="stylesheet" href="./css/index.css">
+    <!-- 字体图标 -->
+    <link rel="stylesheet" href="https://at.alicdn.com/t/c/font_3736758_vxpb728fcyh.css">
+</head>
+<body>
+    <!-- 主体区域 -->
+    <div class="container">
+        <!-- 头部标题和添加按钮 -->
+        <div class="top">
+            <h3>图书管理</h3>
+            <button type="button" class="btn btn-primary plus-btn"> + 添加</button>
+        </div>
+        <!-- 数据列表 -->
+        <table class="table">
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 150px;">序号</th>
+                    <th>书名</th>
+                    <th>作者</th>
+                    <th>出版社</th>
+                    <th style="width: 180px;">操作</th>
+                </tr>
+            </thead>
+            <tbody class="list">
+                <tr>
+                    <td>1</td>
+                    <td>JavaScript程序设计</td>
+                    <td>马特·弗里斯比</td>
+                    <td>人民邮电出版社</td>
+                    <td>
+                        <span class="del">删除</span>
+                        <span class="edit">编辑</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- 新增-弹出框 -->
+    <div class="modal fade add-modal">
+        <!-- 中间白色区域 -->
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header top">
+                    <span>添加图书</span>
+                    <button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body form-wrap">
+                    <!-- 新增表单 -->
+                    <form class="add-form">
+                        <div class="mb-3">
+                            <label for="bookname" class="form-label">书名</label>
+                            <input type="text" class="form-control bookname" placeholder="请输入书籍名称" name="bookname">
+                        </div>
+                        <div class="mb-3">
+                            <label for="author" class="form-label">作者</label>
+                            <input type="text" class="form-control author" placeholder="请输入作者名称" name="author">
+                        </div>
+                        <div class="mb-3">
+                            <label for="publisher" class="form-label">出版社</label>
+                            <input type="text" class="form-control publisher" placeholder="请输入出版社名称" name="publisher">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer btn-group">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal"> 取消 </button>
+                    <button type="button" class="btn btn-primary add-btn"> 保存 </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 编辑-弹出框 -->
+    <div class="modal fade edit-modal">
+        <!-- 中间白色区域 -->
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header top">
+                    <span>编辑图书</span>
+                    <button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body form-wrap">
+                    <!-- 编辑表单 -->
+                    <form class="edit-form">
+                        <input type="hidden" class="id" name="id">
+                        <div class="mb-3">
+                            <label for="bookname" class="form-label">书名</label>
+                            <input type="text" class="form-control bookname" placeholder="请输入书籍名称" name="bookname">
+                        </div>
+                        <div class="mb-3">
+                            <label for="author" class="form-label">作者</label>
+                            <input type="text" class="form-control author" placeholder="请输入作者名称" name="author">
+                        </div>
+                        <div class="mb-3">
+                            <label for="publisher" class="form-label">出版社</label>
+                            <input type="text" class="form-control publisher" placeholder="请输入出版社名称" name="publisher">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer btn-group">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal"> 取消 </button>
+                    <button type="button" class="btn btn-primary edit-btn"> 修改 </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/1.2.0/axios.min.js"></script>
+    <script src="./lib/form-serialize.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.3/js/bootstrap.min.js"></script>
+    <!-- <script src="./js/index.js"></script> -->
+    <script>
+        // 增删改查实现代码
+        // 声明一个外号 相当于账户 这样每个人图书列表不一样 操作数据就不会影响其他人数据
+        let zh = '张三'
+
+        // 01. ajax请求 + 渲染数据
+        let fn = () => {
+            // 1.1 发起ajax请求
+            axios.get('http://hmajax.itheima.net/api/books', {params: {creator: zh}})
+            .then(res => {
+                console.log(res.data.data)
+            // 1.2 获取tbody标签 服务器响应后 渲染返回的数据
+                document.querySelector('.list').innerHTML = 
+                    res.data.data.map(item => 
+                       `<tr>
+                           <td>${item.id}</td>
+                           <td>${item.bookname}</td>
+                           <td>${item.author}</td>
+                           <td>${item.publisher}</td>
+                           <td>
+                               <span class="del" data-id="${item.id}">删除</span>
+                               <span class="edit" data-id="${item.id}">编辑</span>
+                           </td>
+                       </tr>`
+                ).join('')
+            })
+        }
+        fn() // 1.3 调用查找图书功能
+
+        // 02. 新增图书功能
+        // 2.1 点击添加事件 实例对象写在外面 因为每次调用会创建新对象
+        let modal = new bootstrap.Modal(document.querySelector('.modal'))
+        document.querySelector('.plus-btn').addEventListener('click', function () {
+        // 2.2 调用模态框
+            modal.show()
+        })
+
+        // 2.3 点击保存按钮事件 表单提交
+        document.querySelector('.add-btn').addEventListener('click', function () {
+        // 2.4 获取表单数据 serialize
+            let input = serialize(document.querySelector('.add-form'), {hash: true, empty: true})
+            console.log(input)
+        // 2.5 非空效验 item === '' 与 !item 等价
+        if (Object.values(input).some(item => !item.trim())) {
+            alert('输入框不能为空')
+            return
+        }
+        // 2.6 发送ajax请求
+        axios.post('http://hmajax.itheima.net/api/books', {...input, creator: zh}).then(res => {
+            console.log(res)
+            // 2.7 重新渲染返回的数据
+            fn()
+            // 2.8 弹窗消失(调用modal对象)
+            modal.hide()
+            // 2.9 reset()方法 输入后表单清空
+            document.querySelector('.add-form').reset()
+        })
+        })
+
+        // 03. 图书修改编辑功能
+        // 3.1 点击编辑事件 实例对象写外面 因为每次调用会创建新对象
+        let add_modal = new bootstrap.Modal(document.querySelector('.edit-modal'))
+        document.querySelector('tbody').addEventListener('click', function (e) {
+        // 3.2 判断是否是编辑按钮
+            if (e.target.classList.contains('edit')) {
+        // 3.3 调用模态框
+                add_modal.show()
+        // 3.4 数据回显 ajax获取当前图书信息 渲染到表单框里
+        // 路径参数: 不需要?分隔 直接url/参数值
+            axios.get(`http://hmajax.itheima.net/api/books/${e.target.dataset.id}`).then(res => {
+                console.log(res.data)
+        // 3.5 数据回显 页面有四个表单的 id表单隐藏了 不需要用户填写
+        // !! 服务器返回的对象属性名和表单类名一样的 可直接obj.keys方法 然后forEach遍历
+            // document.querySelector('.edit-form .id').value = res.data.data.id
+            // document.querySelector('.edit-form .bookname').value = res.data.data.bookname
+            // document.querySelector('.edit-form .author').value = res.data.data.author
+            // document.querySelector('.edit-form .publisher').value = res.data.data.publisher
+            Object.keys(res.data.data).forEach(item => {
+                document.querySelector(`.edit-form .${item}`).value = res.data.data[item]
+            })
+            })
+            }
+        })
+
+        // 04. 图书修改保存功能
+        document.querySelector('.edit-btn').addEventListener('click', function () {
+        // 获取表单数据 serialize
+            let input = serialize(document.querySelector('.edit-form'), {hash: true, empty: true})
+            console.log(input)
+        // 非空效验 item === '' 与 !item 等价
+            if (Object.values(input).some(item => !item)) {
+                alert('输入框不能为空')
+                return
+            }
+        // 4.1 发送ajax请求
+        axios.put(`http://hmajax.itheima.net/api/books/${input.id}`, {...input, creator: zh}).then(res => {
+            console.log(res)
+            // 重新渲染返回的数据
+            fn()
+            // 弹窗消失(调用modal对象)
+            add_modal.hide()
+            // reset()方法 输入后表单清空
+            document.querySelector('.edit-form').reset()
+        })
+        })
+
+        // 05. 图书删除功能
+        document.querySelector('tbody').addEventListener('click', function (e) {
+            // 5.1 判断是否删除按钮
+            if (e.target.classList.contains('del')) {
+            // 5.2 发送ajax的delete请求 获取id发送ajax请求
+                axios.delete(`http://hmajax.itheima.net/api/books/${e.target.dataset.id}`).then(res => {
+                    console.log(res.data.data)
+            // 5.3 重新渲染返回的数据
+                    fn()
+                })
+            }
+        })
+    </script>
+</body>
+</html>
